@@ -17,7 +17,9 @@ public class CandyManagerTest {
 	@Test
 	public void checkAdd() {
 		cm.add(candy);
-		assertEquals(cm.getAll().get(0).name, "Chocolate");
+		cm.add(candy2);
+		assertEquals(cm.getAll().get(0).getName(), "Chocolate");
+		assertEquals(cm.getAll().get(1).getBrand(), "Oreo");
 	}
 	
 	@Test
@@ -25,8 +27,9 @@ public class CandyManagerTest {
 		cm.add(candy);
 		cm.add(candy2);
 		cm.add(candy3);
-		assertEquals(cm.getAll().get(0).name, "Chocolate");
+		assertEquals(cm.getAll().get(0).getName(), "Chocolate");
 		assertEquals(cm.getAll().size(), 3);
+		
 	}
 
 }
