@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -28,13 +29,13 @@ public class MockitoAppTest {
 	private MessageService mock;
 	
 	@Before
-	public void setUP() throws MalformedRecipientException {
+	public void setUP() {
 		 mock = Mockito.mock(MessageService.class);
 		 messenger = new Messenger(mock);
 	}
 
 	@Test
-	public void checkTestConnection() throws MalformedRecipientException {
+	public void checkTestConnection() {
 		when(mock.checkConnection(VALID_SERVER)).thenReturn(ConnectionStatus.SUCCESS);
 		assertThat(messenger.testConnection(VALID_SERVER), equalTo(0));
 		
@@ -73,5 +74,10 @@ public class MockitoAppTest {
 		
 		verify(mock).checkConnection(INVALID_SERVER);
 	}
-	  
+	
+	@After
+	public void validate() {
+	    validateMockitoUsage();
+	}
+	
 }
