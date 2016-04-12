@@ -29,7 +29,7 @@ public class MessageServiceSimpleImpl implements MessageService {
 		}
 
 		// sending logic here ...
-		if (true) { //random.nextBoolean() oszukaneee
+		if (random.nextBoolean()) { 
 			return SendingStatus.SENT;
 		}
 		return SendingStatus.SENDING_ERROR;

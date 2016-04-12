@@ -1,6 +1,9 @@
 package com.example.messenger;
 
+import static org.hamcrest.CoreMatchers.either;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
@@ -28,6 +31,11 @@ public class MessengerSteps {
 	@Then("sending message should return $result")
 	public void shouldSend(int result) {
 		assertEquals(result, messenger.sendMessage(server, message));
+	}
+	
+	@Then("sending message should return $result or $result2")
+	public void shouldSend2(int result, int result2) {
+		assertThat(messenger.sendMessage(server, message),either(equalTo(result)).or(equalTo(result2)));
 	}
 	
 	@Then("testing connection should return $result")
