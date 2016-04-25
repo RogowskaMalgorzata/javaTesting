@@ -2,9 +2,11 @@ package com.example.wej02;
 
 import org.jbehave.web.selenium.WebDriverProvider;
 
+import com.example.wej02.pages.Discussion;
 import com.example.wej02.pages.Home;
 import com.example.wej02.pages.Olsztyn;
 import com.example.wej02.pages.Login;
+import com.example.wej02.pages.Logout;
 
 public class Pages {
 	
@@ -14,6 +16,8 @@ private WebDriverProvider driverProvider;
 	private Home home;
 	private Login login;
 	private Olsztyn olsztyn;
+	private Logout logout;
+	private Discussion discussion;
 
 
 	public Pages(WebDriverProvider driverProvider) {
@@ -40,5 +44,19 @@ private WebDriverProvider driverProvider;
 			olsztyn = new Olsztyn(driverProvider);
 		}
 		return olsztyn;
+	}
+	
+	public Logout logout() {
+		if (logout == null) {
+			logout = new Logout(driverProvider);
+		}
+		return logout;
+	}
+	
+	public Discussion discussion() {
+		if (discussion == null) {
+			discussion = new Discussion(driverProvider);
+		}
+		return discussion;
 	}
 }

@@ -2,15 +2,19 @@ package com.example.wej02.pages;
 
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.Assert.assertNotNull;
+
 import org.jbehave.web.selenium.WebDriverPage;
 import org.jbehave.web.selenium.WebDriverProvider;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 public class Login extends WebDriverPage{
 	
 	private final static String LOGIN_ID = "wpName1";
 	private final static String PASS_ID = "wpPassword1";
 	private final static String LOGIN_BUTTON_ID = "wpLoginAttempt";
+	private final static String ERROR_BOX_CLASSNAME = "errorbox";
 	
 	public Login(WebDriverProvider driverProvider) {
 		super(driverProvider);
@@ -28,5 +32,10 @@ public class Login extends WebDriverPage{
 	
 	public void logIn() {
 		findElement(By.id(LOGIN_BUTTON_ID)).click();
+	}
+	
+	public void showError() {
+		WebElement element = findElement(By.className(ERROR_BOX_CLASSNAME));
+		assertNotNull(element);
 	}
 }

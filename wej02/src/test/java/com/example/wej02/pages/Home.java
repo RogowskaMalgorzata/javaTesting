@@ -16,6 +16,8 @@ public class Home extends WebDriverPage {
 
 	private final static String LOGIN_LINK = "Zaloguj się";
 	private final static String SEARCH_ID = "searchInput";
+	private final static String LOGOUT_LINK = "Wyloguj";
+	private final static String DISCUSSION_LINK = "Dyskusja";
 
 	public void open() {
 		get("https://pl.wikipedia.org/");
@@ -30,5 +32,13 @@ public class Home extends WebDriverPage {
 		WebElement element = findElement(By.id(SEARCH_ID));
 		element.sendKeys(name);
 		element.sendKeys(Keys.ENTER);
+	}
+	
+	public void logOut() {
+		findElement(By.linkText(LOGOUT_LINK)).click();
+	}
+	
+	public void clickDiscussionLink() {
+		findElement(By.linkText(DISCUSSION_LINK)).click();
 	}
 }

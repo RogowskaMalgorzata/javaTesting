@@ -50,6 +50,16 @@ public class WikipediaSteps {
        assertEquals("Wikipedia, wolna encyklopedia", pages.home().getTitle());
     }
     
+    @When("user clicks Dyskusja link")
+    public void userclicksDyskusja() {
+    	pages.home().clickDiscussionLink();
+    }
+    
+    @Then("Dyskusja page is shown")
+    public void discussionPageIsShown(){
+    	pages.discussion().isItShown();
+    }
+    
     @When("user searches $name")
     public void searchOlsztyn(String name) {        
         pages.home().search(name);
@@ -73,5 +83,20 @@ public class WikipediaSteps {
     @Then("Muzea content is shown")
     public void museumContentIsShown() {
     	assertEquals("https://pl.wikipedia.org/wiki/Olsztyn#Muzea", pages.olsztyn().getCurrentUrl());
+    }
+    
+    @When("user clicks Wyloguj")
+    public void userLogsOut() {
+    	pages.home().logOut();
+    }
+    
+    @Then("Wyloguj page is shown")
+    public void logoutPageIsShown() {
+    	assertEquals("Wyloguj – Wikipedia, wolna encyklopedia", pages.logout().getTitle());
+    }
+    
+    @Then("error is shown")
+    public void errorIsShown() {
+    	pages.login().showError();
     }
 }
