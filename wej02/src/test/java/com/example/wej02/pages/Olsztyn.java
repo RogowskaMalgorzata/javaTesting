@@ -38,7 +38,7 @@ public class Olsztyn extends WebDriverPage {
 	    assertNotNull(screenshot);
 
 		try {
-			FileUtils.copyFile(screenshot, new File("../../tmp/museum.png"));
+			FileUtils.copyFile(screenshot, new File("./museum.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 			assertTrue(false);

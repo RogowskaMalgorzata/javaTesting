@@ -27,7 +27,7 @@ public class Discussion extends WebDriverPage{
 	    assertNotNull(screenshot);
 
 		try {
-			FileUtils.copyFile(screenshot, new File("../../tmp/discussionPage.png"));
+			FileUtils.copyFile(screenshot, new File("./discussionPage.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 			assertTrue(false);
