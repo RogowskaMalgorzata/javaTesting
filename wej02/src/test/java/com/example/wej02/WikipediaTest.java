@@ -35,9 +35,9 @@ public class WikipediaTest extends JUnitStories{
     private ContextView contextView = new LocalFrameContextView().sized(500, 100);
 
     public WikipediaTest() { 
-//    	System.setProperty("webdriver.chrome.driver", "/home/PJWSTK/s11803/chromeDriver/chromedriver");
+    	System.setProperty("webdriver.chrome.driver", "/home/PJWSTK/s11803/chromeDriver/chromedriver");
 //    	System.setProperty("webdriver.chrome.driver", "E:/projekty/chromedriver/chromedriver.exe");
-    	System.setProperty("webdriver.chrome.driver", "/Users/kuba/Dev/chromedriver/chromedriver");
+//    	System.setProperty("webdriver.chrome.driver", "/Users/kuba/Dev/chromedriver/chromedriver");
     }
     
     @Override

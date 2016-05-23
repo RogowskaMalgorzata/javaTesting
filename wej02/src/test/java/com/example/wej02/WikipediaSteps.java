@@ -25,9 +25,9 @@ public class WikipediaSteps {
         pages.home().clickLoginLink();
     }
  
-    @Then("Zaloguj się page is shown")
-    public void loginPageIsShown(){
-       assertEquals("Zaloguj się – Wikipedia, wolna encyklopedia", pages.login().getTitle());
+    @Then("$title login page is shown")
+    public void loginPageIsShown(String title){
+       assertEquals(title, pages.login().getTitle());
     }	
     
     @Given("user is on Zaloguj się page")
@@ -65,9 +65,9 @@ public class WikipediaSteps {
         pages.home().search(name);
     }
     
-    @Then("Olsztyn page is shown") 
-    public void olsztynPageIsShown() {
-    	assertEquals("Olsztyn – Wikipedia, wolna encyklopedia", pages.olsztyn().getTitle());
+    @Then("$title olsztyn page is shown") 
+    public void olsztynPageIsShown(String title) {
+    	assertEquals(title, pages.olsztyn().getTitle());
     }
     
     @Given("user is on Olsztyn page")
@@ -80,9 +80,9 @@ public class WikipediaSteps {
     	pages.olsztyn().clickOnMuseumLink();
     }
     
-    @Then("Muzea content is shown")
-    public void museumContentIsShown() {
-    	assertEquals("https://pl.wikipedia.org/wiki/Olsztyn#Muzea", pages.olsztyn().getCurrentUrl());
+    @Then("$url museum page is shown")
+    public void museumContentIsShown(String url) {
+    	assertEquals(url, pages.olsztyn().getCurrentUrl());
     }
     
     @When("user clicks Wyloguj")
@@ -90,9 +90,9 @@ public class WikipediaSteps {
     	pages.home().logOut();
     }
     
-    @Then("Wyloguj page is shown")
-    public void logoutPageIsShown() {
-    	assertEquals("Wyloguj – Wikipedia, wolna encyklopedia", pages.logout().getTitle());
+    @Then("$title logout page is shown")
+    public void logoutPageIsShown(String title) {
+    	assertEquals(title, pages.logout().getTitle());
     }
     
     @Then("error is shown")

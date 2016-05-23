@@ -1,6 +1,6 @@
 Given user is on Home page
 When user clicks Zaloguj się
-Then Zaloguj się page is shown
+Then Zaloguj się – Wikipedia, wolna encyklopedia login page is shown
 
 Given user is on Zaloguj się page
 When user gives jellycherry and gosiaczek 
@@ -12,15 +12,15 @@ Then Dyskusja page is shown
 
 Given user is on Home page
 When user searches Olsztyn
-Then Olsztyn page is shown
+Then Olsztyn – Wikipedia, wolna encyklopedia olsztyn page is shown
 
 Given user is on Olsztyn page
 When user clicks on Muzea link
-Then Muzea content is shown
+Then https://pl.wikipedia.org/wiki/Olsztyn#Muzea museum page is shown
 
 Given user is on Home page
 When user clicks Wyloguj
-Then Wyloguj page is shown 
+Then Wyloguj – Wikipedia, wolna encyklopedia logout page is shown 
 
 Given user is on Home page
 When user clicks Zaloguj się
