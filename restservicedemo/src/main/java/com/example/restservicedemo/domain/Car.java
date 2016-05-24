@@ -9,17 +9,17 @@ public class Car {
 	private String make;
 	private String model;	
 	private int yop;
-	private long owner_id;
+	private Person owner;
 	
-	public Car(long id, String make, String model, int yop, long owner_id) {
+	public Car(long id, String make, String model, int yop, Person owner) {
 		super();
 		this.id = id;
 		this.make = make;
 		this.model = model;
 		this.yop = yop;
-		this.owner_id = owner_id;
+		this.owner = owner;
 	}
-
+	
 	public Car() {
 	}
 
@@ -47,10 +47,10 @@ public class Car {
 	public void setYop(int yop) {
 		this.yop = yop;
 	}
-	public long getOwner_id() {
-		return owner_id;
+	public Person getOwner() {
+		return owner;
 	}
-	public void setOwner(long owner_id) {
-		this.owner_id = owner_id;
+	public void setOwner(Person owner) {
+		this.owner = owner;
 	}
 }

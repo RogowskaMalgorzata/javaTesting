@@ -22,8 +22,11 @@ public class CarManager {
 	private PreparedStatement deleteAllCarsStmt;
 	private PreparedStatement getAllCarsStmt;
 	private PreparedStatement getCarByIdStmt;
+	private PreparedStatement getAllCarsByOwnerIdStmt;
 
 	private Statement statement;
+	
+	private PersonManager pm = new PersonManager();
 
 	public CarManager() {
 		try {
@@ -48,10 +51,13 @@ public class CarManager {
 			deleteAllCarsStmt = connection
 					.prepareStatement("DELETE FROM Car");
 			getAllCarsStmt = connection
-					.prepareStatement("SELECT id, make, model, yop, owner_id FROM Car"); //todo zmienic id na imie osoby
+					.prepareStatement("SELECT id, make, model, yop, owner_id FROM Car"); 
 			getCarByIdStmt = connection
 					.prepareStatement("SELECT id, make, model, yop, owner_id FROM Car where id = ?");
-
+			getAllCarsByOwnerIdStmt = connection
+					.prepareStatement("SELECT Car.id, Car.make, Car.model, Car.yop, Car.owner_id, Person.name, Person.yob "
+							+ "FROM Car INNER JOIN Person ON Car.owner_id=Person.id WHERE Car.owner_id = ?");
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -76,7 +82,7 @@ public class CarManager {
 			addCarStmt.setString(2, car.getMake());
 			addCarStmt.setString(3, car.getModel());
 			addCarStmt.setInt(4, car.getYop());
-			addCarStmt.setLong(5, car.getOwner_id());
+			addCarStmt.setLong(5, car.getOwner().getId());
 
 			count = addCarStmt.executeUpdate();
 
@@ -94,10 +100,11 @@ public class CarManager {
 
 			while (rs.next()) {
 				Car c = new Car();
-				c.setId(rs.getInt("id"));
+				c.setId(rs.getLong("id"));
 				c.setMake(rs.getString("make"));
-				c.setMake(rs.getString("model"));
+				c.setModel(rs.getString("model"));
 				c.setYop(rs.getInt("yop"));
+				c.setOwner(pm.getPerson(rs.getLong("owner_id")));
 				cars.add(c);
 			}
 
@@ -118,6 +125,7 @@ public class CarManager {
 				c.setMake(rs.getString("make"));
 				c.setModel(rs.getString("model"));
 				c.setYop(rs.getInt("yop"));
+				c.setOwner(pm.getPerson(rs.getLong("owner_id")));
 				break;
 			}
 
@@ -126,5 +134,29 @@ public class CarManager {
 		}
 
 		return c;
+	}
+	
+	public List<Car> getAllCarsByOwner(Long owner_id) {
+		List<Car> cars = new ArrayList<Car>();
+
+		try {
+			getAllCarsByOwnerIdStmt.setLong(5, owner_id);
+			ResultSet rs = getAllCarsByOwnerIdStmt.executeQuery();
+
+			while (rs.next()) {
+				Car c = new Car();
+				
+				c.setId(rs.getInt("Car.id"));
+				c.setMake(rs.getString("Car.make"));
+				c.setMake(rs.getString("Car.model"));
+				c.setYop(rs.getInt("Car.yop"));
+				c.setOwner(pm.getPerson(rs.getLong("Car.owner_id")));
+				cars.add(c);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return cars;
 	}
 }

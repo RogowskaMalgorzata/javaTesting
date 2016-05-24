@@ -5,6 +5,7 @@ import static com.jayway.restassured.RestAssured.get;
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
+import static org.junit.Assert.*;
 
 import javax.ws.rs.core.MediaType;
 
@@ -12,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.example.restservicedemo.domain.Person;
+import com.example.restservicedemo.service.PersonManager;
 import com.jayway.restassured.RestAssured;
 
 public class PersonServiceTest {
@@ -27,7 +29,6 @@ public class PersonServiceTest {
 	
 	@Test
 	public void addPersons(){		
-		
 		delete("/person/").then().assertThat().statusCode(200);
 		
 		Person person = new Person(1L, PERSON_FIRST_NAME, 1976);
@@ -44,5 +45,37 @@ public class PersonServiceTest {
 		
 	}
 	
+	@Test
+	public void getAllPersons(){
+		PersonManager pm = new PersonManager();
+		delete("/person/").then().assertThat().statusCode(200);
+		
+		Person person = new Person(1L, PERSON_FIRST_NAME, 1976);
+		Person person2 = new Person(2L, "Jan", 1976);
+		Person person3 = new Person(3L, PERSON_FIRST_NAME, 1976);
+		
+		given().
+	       contentType(MediaType.APPLICATION_JSON).
+	       body(person).
+	    when().	     
+	    post("/person/").then().assertThat().statusCode(201);
+		
+		given().
+	       contentType(MediaType.APPLICATION_JSON).
+	       body(person2).
+	    when().	     
+	    post("/person/").then().assertThat().statusCode(201);
+		
+		given().
+	       contentType(MediaType.APPLICATION_JSON).
+	       body(person3).
+	    when().	     
+	    post("/person/").then().assertThat().statusCode(201);
+				
+		Person rPerson = get("/person/2").as(Person.class);
+		
+		assertEquals("Jan", rPerson.getFirstName());
+		assertEquals(3, pm.getAllPersons().size());	
+	}
 
 }
