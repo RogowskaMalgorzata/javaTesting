@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.restservicedemo.domain.Car;
-import com.example.restservicedemo.domain.Person;
+import com.example.restservicedemo.domain.Purchase;
 
 public class CarManager {
 	private Connection connection;
@@ -167,11 +167,11 @@ public class CarManager {
 		return cars;
 	}
 	
-	public int sellCar(Car car, Person person) {
+	public int sellCar(Purchase purchase) {
 		int count = 0;
 		try {
-			sellCarStmt.setLong(1, person.getId());
-			sellCarStmt.setLong(2, car.getId());
+			sellCarStmt.setLong(1, purchase.getPerson().getId());
+			sellCarStmt.setLong(2, purchase.getCar().getId());
 
 			count = sellCarStmt.executeUpdate();
 

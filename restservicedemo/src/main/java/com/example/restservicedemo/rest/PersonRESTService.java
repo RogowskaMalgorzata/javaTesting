@@ -50,7 +50,7 @@ public class PersonRESTService {
 		return Response.status(200).build();
 	}
 	
-	@GET
+	@DELETE
 	@Path("/drop")
 	public Response deletePersonTable() {
 		pm.deletePersonTable();
@@ -58,7 +58,7 @@ public class PersonRESTService {
 	}
 	
 	@GET
-	@Path("/all")
+	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Person> getAllPersons(){
 		List<Person> persons = pm.getAllPersons();

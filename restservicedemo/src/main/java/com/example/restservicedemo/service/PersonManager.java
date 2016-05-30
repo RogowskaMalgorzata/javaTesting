@@ -95,7 +95,7 @@ public class PersonManager {
 
 			while (rs.next()) {
 				Person p = new Person();
-				p.setId(rs.getInt("p_id"));
+				p.setId(rs.getLong("p_id"));
 				p.setFirstName(rs.getString("name"));
 				p.setYob(rs.getInt("yob"));
 				persons.add(p);
@@ -114,7 +114,7 @@ public class PersonManager {
 			ResultSet rs = getPersonByIdStmt.executeQuery();
 			
 			while (rs.next()) {
-				p.setId(rs.getInt("p_id"));
+				p.setId(rs.getLong("p_id"));
 				p.setFirstName(rs.getString("name"));
 				p.setYob(rs.getInt("yob"));
 				break;

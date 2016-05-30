@@ -18,7 +18,6 @@ public class Car {
 	}
 	
 	public Car(long id, String make, String model, int yop) {
-		super();
 		this.id = id;
 		this.make = make;
 		this.model = model;

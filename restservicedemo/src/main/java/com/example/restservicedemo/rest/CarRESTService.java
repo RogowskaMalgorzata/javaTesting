@@ -13,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.example.restservicedemo.domain.Car;
-import com.example.restservicedemo.domain.Person;
+import com.example.restservicedemo.domain.Purchase;
 import com.example.restservicedemo.service.CarManager;
 
 @Path("car")
@@ -52,6 +52,13 @@ public class CarRESTService {
 			return Response.status(200).build();
 		}
 		
+		@DELETE
+		@Path("/drop")
+		public Response deletePersonTable() {
+			cm.deleteCarTable();
+			return Response.status(200).build();
+		}
+		
 		@GET
 		@Path("/owner/{ownerId}")
 		@Produces(MediaType.APPLICATION_JSON)
@@ -61,7 +68,7 @@ public class CarRESTService {
 		}
 		
 		@GET
-		@Path("/all")
+		@Path("/")
 		@Produces(MediaType.APPLICATION_JSON)
 		public List<Car> getAllCars(){
 			List<Car> cars = cm.getAllCars();
@@ -71,8 +78,8 @@ public class CarRESTService {
 		@POST
 		@Path("/sell")
 		@Consumes(MediaType.APPLICATION_JSON)
-		public Response sellCar(Car car, Person owner){
-			cm.sellCar(car, owner);
+		public Response sellCar(Purchase purchase){
+			cm.sellCar(purchase);
 			return Response.status(201).entity("Car").build(); 
 		}
 	}
