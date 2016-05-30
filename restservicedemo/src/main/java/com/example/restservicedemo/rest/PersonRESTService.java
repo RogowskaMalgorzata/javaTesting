@@ -49,10 +49,17 @@ public class PersonRESTService {
 		pm.clearPersons();
 		return Response.status(200).build();
 	}
-
+	
+	@GET
+	@Path("/drop")
+	public Response deletePersonTable() {
+		pm.deletePersonTable();
+		return Response.status(200).build();
+	}
+	
 	@GET
 	@Path("/all")
-	@Produces(MediaType.TEXT_HTML)
+	@Produces(MediaType.APPLICATION_JSON)
 	public List<Person> getAllPersons(){
 		List<Person> persons = pm.getAllPersons();
 		return persons;
