@@ -3,98 +3,106 @@ package com.example.restservicedemo;
 import static com.jayway.restassured.RestAssured.delete;
 import static com.jayway.restassured.RestAssured.get;
 import static com.jayway.restassured.RestAssured.given;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalToIgnoringCase;
-
 import javax.ws.rs.core.MediaType;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.After;
+import org.dbunit.Assertion;
+import org.dbunit.IDatabaseTester;
+import org.dbunit.JdbcDatabaseTester;
+import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ITable;
+import org.dbunit.dataset.filter.DefaultColumnFilter;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.operation.DatabaseOperation;
+import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.example.restservicedemo.domain.Car;
 import com.example.restservicedemo.domain.Person;
 import com.example.restservicedemo.domain.Purchase;
+import com.example.restservicedemo.service.CarManager;
+import com.example.restservicedemo.service.PersonManager;
 import com.jayway.restassured.RestAssured;
 
 public class CarServiceTest {
 	
-	static Person person;
-	static Car car, car2, car3;
+	private static IDatabaseConnection connection ;
+	private static IDatabaseTester databaseTester;
+	
+	static PersonManager pm = new PersonManager();
+	static CarManager cm = new CarManager(); 
+	
+	public void cleanAndInsert(String source) throws Exception {
+		cm.deleteCarTable();
+		pm.deletePersonTable();
+		pm.createTable();
+		cm.createTable();
+		
+		IDataSet dataSet = new FlatXmlDataSetBuilder().build(
+				new FileInputStream(new File(source)));
+		databaseTester = new JdbcDatabaseTester("org.hsqldb.jdbcDriver", "jdbc:hsqldb:hsql://localhost/workdb", "sa", "");
+		databaseTester.setDataSet(dataSet);
+		databaseTester.setSetUpOperation(DatabaseOperation.CLEAN_INSERT);
+		databaseTester.onSetup();
+	}
 	
 	@BeforeClass
-	public static void setUp(){
+	public static void setUp() throws Exception{
 		RestAssured.baseURI = "http://localhost";
 		RestAssured.port = 8080;
 		RestAssured.basePath = "/restservicedemo/api";
 		
-		person = new Person("Jasiu", 1976);
-		car = new Car("Ford", "Fiesta", 2011);
-		car2 = new Car("Ford", "Fiesta", 2011);
-		car3 = new Car("Fiat", "Punto", 2011);
+		Connection jdbcConnection;
+		jdbcConnection = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost/workdb", "sa", "");
+		connection = new DatabaseConnection(jdbcConnection);
+	}
+	
+	@Before
+	public void insertSampleData() throws Exception {
+		cleanAndInsert("src/test/resources/fullDataWithCar.xml");
 	}
 	
 	@Test
-	public void addCar(){
+	public void addCar() throws Exception{
+		Car car = new Car("Ford", "Fiesta", 2011);
 		given().
 	       	contentType("application/json").
 	       	body(car).	     
 		post("/car/").then().assertThat().statusCode(201);
 		
-		Car rCar = get("/car/1").as(Car.class);
+		IDataSet dbDataSet = connection.createDataSet();
+		ITable actualTable = dbDataSet.getTable("CAR");
+		ITable filteredTable = DefaultColumnFilter.excludedColumnsTable(actualTable, new String[]{"C_ID", "OWNER_ID"});
 		
-		assertThat("Fiesta", equalToIgnoringCase(rCar.getModel()));
+		IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(
+				new File("src/test/resources/carData.xml"));
+		ITable expectedTable = expectedDataSet.getTable("CAR");
+		
+		Assertion.assertEquals(expectedTable, filteredTable);
 	}
 	
 	@Test
-	public void getAllCars(){
-		given().
-	       contentType(MediaType.APPLICATION_JSON).
-	       body(car).
-	    when().	     
-	    post("/car/").then().assertThat().statusCode(201);
-		
-		given().
-	       contentType(MediaType.APPLICATION_JSON).
-	       body(car2).
-	    when().	     
-	    post("/car/").then().assertThat().statusCode(201);
-		
-		given().
-	       contentType(MediaType.APPLICATION_JSON).
-	       body(car3).
-	    when().	     
-	    post("/car/").then().assertThat().statusCode(201);
-				
-		Car rCar = get("/car/3").as(Car.class);
-		assertThat("Fiat", equalToIgnoringCase(rCar.getMake()));
-		
+	public void getAllCars(){		
 		List<Car> rCars = Arrays.asList(get("/car/").as(Car[].class));
 		assertEquals(3, rCars.size());
 	}
 	
 	@Test
 	public void sellCar() {
-		given().
-	       contentType(MediaType.APPLICATION_JSON).
-	       body(car).
-	    when().	     
-	    post("/car/").then().assertThat().statusCode(201);
-		
-		given().
-	       contentType(MediaType.APPLICATION_JSON).
-	       body(person).
-	    when().	     
-	    post("/person/").then().assertThat().statusCode(201);
-		
 		Car rCar = get("/car/1").as(Car.class);
 		Person rPerson = get("/person/1").as(Person.class);
-		
 		Purchase purchase = new Purchase(rPerson, rCar);
 		
 		given().
@@ -109,42 +117,8 @@ public class CarServiceTest {
 	}
 	
 	@Test
-	public void getAllCarsByOwner() {
-		given().
-	       contentType(MediaType.APPLICATION_JSON).
-	       body(person).
-	    when().	     
-	    post("/person/").then().assertThat().statusCode(201);
-		
-		given().
-	       contentType(MediaType.APPLICATION_JSON).
-	       body(car2).
-	    when().	     
-	    post("/car/").then().assertThat().statusCode(201);
-		
-		given().
-	       contentType(MediaType.APPLICATION_JSON).
-	       body(car3).
-	    when().	     
-	    post("/car/").then().assertThat().statusCode(201);
-		
-		Car rCar = get("/car/1").as(Car.class);
-		Car rCar2 = get("/car/2").as(Car.class);
-		Person rPerson = get("/person/1").as(Person.class);
-		Purchase purchase = new Purchase(rPerson, rCar);
-		Purchase purchase2 = new Purchase(rPerson, rCar2);
-		
-		given().
-	       contentType(MediaType.APPLICATION_JSON).
-	       body(purchase).
-	    when().	     
-	    post("/car/sell").then().assertThat().statusCode(201);
-		
-		given().
-	       contentType(MediaType.APPLICATION_JSON).
-	       body(purchase2).
-	    when().	     
-	    post("/car/sell").then().assertThat().statusCode(201);
+	public void getAllCarsByOwner() throws Exception {
+		cleanAndInsert("src/test/resources/carDataWithOwner.xml");
 		
 		List<Car> rCars = Arrays.asList(get("/car/owner/1").as(Car[].class));
 		assertEquals(2, rCars.size());
@@ -152,26 +126,15 @@ public class CarServiceTest {
 	
 	@Test
 	public void deleteAllCars() {
-		given().
-	       contentType(MediaType.APPLICATION_JSON).
-	       body(car).
-	    when().	     
-	    post("/car/").then().assertThat().statusCode(201);
-		
-		given().
-	       contentType(MediaType.APPLICATION_JSON).
-	       body(car2).
-	    when().	     
-	    post("/car/").then().assertThat().statusCode(201);
-		
 		delete("/car/").then().assertThat().statusCode(200);
 		List<Car> rCars = Arrays.asList(get("/car/").as(Car[].class));
 		assertEquals(0, rCars.size());
 	}
 
-	@After
-	public void cleanUp() {
-		delete("/car/drop").then().assertThat().statusCode(200);
-		delete("/person/drop").then().assertThat().statusCode(200);
+	@AfterClass
+	public static void tearDown() throws Exception{
+		cm.deleteCarTable();
+		pm.deletePersonTable();
+		databaseTester.onTearDown();
 	}
 }

@@ -3,4 +3,8 @@
 	<PERSON NAME="Jasiu" YOB="1976"/>
 	<PERSON NAME="Jan" YOB="1976"/>
 	<PERSON NAME="Janusz" YOB="1980"/>
+	
+	<CAR MAKE="Ford" MODEL="Focus" YOP="2001"/>
+	<CAR MAKE="Honda" MODEL="Civic" YOP="2005"/>
+	<CAR MAKE="Toyota" MODEL="Yaris" YOP="2000"/>
 </dataset>
