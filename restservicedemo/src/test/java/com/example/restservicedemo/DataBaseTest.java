@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.example.restservicedemo.domain.Car;
@@ -19,11 +20,16 @@ public class DataBaseTest {
 	//systems under test
 	static PersonManager pm = new PersonManager();
 	static CarManager cm = new CarManager();
-	Person p1, p2, p3;
-	Car c1, c2, c3;
+	static Person p1, p2, p3;
+	static Car c1, c2, c3;
 	
-	@Before
-	public void setUp() {
+	@BeforeClass
+	public static void setUp() {
+		cm.deleteCarTable();
+		pm.deletePersonTable();
+		pm.createTable();
+		cm.createTable();
+		
 		p1 = new Person("Jan", 1980);
 		p2 = new Person("Zenek", 1990);
 		p3 = new Person("Jan", 1985);
