@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <CANDY CID="1" CNAME="czekolada wedel" PRICE="3.2" SOLD="false"/>
+  <CANDY CID="2" CNAME="ciastka" PRICE="5" SOLD="true"/>
+  <PERSON_CANDY CANDIES_CID="2" PERSON_PID="1"/>
+</dataset>
