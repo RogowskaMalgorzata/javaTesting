@@ -1,7 +1,7 @@
 package com.example.springhibernatedemo.service;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.springhibernatedemo.domain.Candy;
 import com.example.springhibernatedemo.domain.Person;
-import com.example.springhibernatedemo.service.SellingManager;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
@@ -31,15 +30,15 @@ import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
     DirtiesContextTestExecutionListener.class,
     TransactionalTestExecutionListener.class,
     DbUnitTestExecutionListener.class })
+@DatabaseSetup("/fullData.xml")
 public class SellingManagerDBUnitTest {
 
 	@Autowired
 	SellingManager sellingManager;
 	
 	@Test
-	@DatabaseSetup("/fullData.xml")
-	@ExpectedDatabase(value = "/addPersonData.xml", 
-	assertionMode = DatabaseAssertionMode.NON_STRICT)
+	@ExpectedDatabase(value = "/addPersonData.xml", table = "PERSON", 
+			assertionMode = DatabaseAssertionMode.NON_STRICT)
 	public void addPersonCheck() {
         Person p = new Person();
         p.setpName("Kaziu");
@@ -49,32 +48,25 @@ public class SellingManagerDBUnitTest {
 	}
 	
 	@Test
-	@DatabaseSetup("/fullData.xml")
 	public void getPersonsCheck() {
 		assertEquals(2, sellingManager.getAllPersons().size());
 	}
 	
 	@Test
-	@DatabaseSetup("/fullData.xml")
-	@ExpectedDatabase(value = "/deletePersonData.xml", 
-	assertionMode = DatabaseAssertionMode.NON_STRICT)
+	@ExpectedDatabase(value = "/deletePersonData.xml", table = "PERSON")
 	public void deletePersonCheck() {
-		Person rPerson = sellingManager.getAllPersons().get(0);
-		Person rPerson2 = sellingManager.getAllPersons().get(1);
+		Person rPerson = sellingManager.findPersonByPesel("10048580561");
 		
 		sellingManager.deletePerson(rPerson);
-		sellingManager.deletePerson(rPerson2);
 	}
 	
 	@Test
-	@DatabaseSetup("/fullData.xml")
 	public void findPersonByPeselCheck() {
 		assertEquals("Jan", sellingManager.findPersonByPesel("01028900561").getpName());
 	}
 	
 	@Test
-	@DatabaseSetup("/fullData.xml")
-	@ExpectedDatabase(value = "/addCandyData.xml", 
+	@ExpectedDatabase(value = "/addCandyData.xml", table = "CANDY",
 	assertionMode = DatabaseAssertionMode.NON_STRICT)
 	public void addCandyCheck() {
         Candy c = new Candy();
@@ -87,13 +79,11 @@ public class SellingManagerDBUnitTest {
 	}
 	
 	@Test
-	@DatabaseSetup("/fullData.xml")
 	public void getAvailableCandiesCheck() {
 		assertEquals(1, sellingManager.getAvailableCandies().size());
 	}
 	
 	@Test
-	@DatabaseSetup("/fullData.xml")
 	public void buyCandy() {
 		Candy c = sellingManager.getAvailableCandies().get(0);
 		Person p = sellingManager.getAllPersons().get(0);
@@ -105,25 +95,22 @@ public class SellingManagerDBUnitTest {
 	}
 	
 	@Test
-	@DatabaseSetup("/fullData.xml")
 	public void findCandyByIdCheck() {
 		assertEquals("ciastka", sellingManager.findCandyById(2L).getcName());
 	}
 	
 	@Test
-	@DatabaseSetup("/fullData.xml")
 	public void getCandiesByPersonCheck() {
 		Person p = sellingManager.findPersonByPesel("01028900561");
 		assertEquals(1, sellingManager.getCandiesByPerson(p).size());
 	}
 	
 	@Test
-	@DatabaseSetup("/fullData.xml")
-//	@ExpectedDatabase(value = "/eatCandyData.xml", 
-//	assertionMode = DatabaseAssertionMode.NON_STRICT)
+	@ExpectedDatabase(value = "/eatCandyData.xml", table="CANDY",
+	assertionMode = DatabaseAssertionMode.NON_STRICT)
 	public void eatCandy() {
 		Person p = sellingManager.findPersonByPesel("01028900561");
-		Candy c = p.getCandies().get(0);
+		Candy c = sellingManager.findCandyById(2L);
 		
 		sellingManager.eatCandy(p, c);
 		assertEquals(0,p.getCandies().size());

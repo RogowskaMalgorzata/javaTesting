@@ -1,9 +1,12 @@
 package com.example.springhibernatedemo.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
@@ -17,6 +20,7 @@ public class Candy {
 	private String cName;
 	private float price;
 	private Boolean sold = false;
+	private Person person;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -47,6 +51,15 @@ public class Candy {
 	}
 	public void setSold(Boolean sold) {
 		this.sold = sold;
+	}
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "PID", nullable = true)
+	public Person getPerson() {
+		return person;
+	}
+	public void setPerson(Person person) {
+		this.person = person;
 	}
 	
 }

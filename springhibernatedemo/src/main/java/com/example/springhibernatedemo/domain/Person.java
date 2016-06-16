@@ -1,7 +1,7 @@
 package com.example.springhibernatedemo.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -23,7 +23,7 @@ public class Person {
 	private Long pId;
 	private String pName;
 	private String pesel;
-	private List<Candy> candies = new ArrayList<Candy>();
+	private Set<Candy> candies = new HashSet<Candy>();
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -49,11 +49,11 @@ public class Person {
 		this.pesel = pesel;
 	}
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	public List<Candy> getCandies() {
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy="person")
+	public Set<Candy> getCandies() {
 		return candies;
 	}
-	public void setCandies(List<Candy> candies) {
+	public void setCandies(Set<Candy> candies) {
 		this.candies = candies;
 	}
 	

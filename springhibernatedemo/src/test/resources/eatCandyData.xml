@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <CANDY CID="1" CNAME="czekolada wedel" PRICE="3.2" SOLD="false"/>
   <PERSON PID="1" PNAME="Jan" PESEL="01028900561"/>
   <PERSON PID="2" PNAME="Marek" PESEL="10048580561"/>
+  <CANDY CID="1" CNAME="czekolada wedel" PRICE="3.2" SOLD="false"/>
 </dataset>

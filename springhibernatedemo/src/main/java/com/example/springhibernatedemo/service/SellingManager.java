@@ -1,6 +1,7 @@
 package com.example.springhibernatedemo.service;
 
 import java.util.List;
+import java.util.Set;
 
 import com.example.springhibernatedemo.domain.Candy;
 import com.example.springhibernatedemo.domain.Person;
@@ -16,7 +17,7 @@ public interface SellingManager {
 	List<Candy> getAvailableCandies();
 	void eatCandy(Person person, Candy candy);
 	Candy findCandyById(Long id);
-	List<Candy> getCandiesByPerson(Person person);
+	Set<Candy> getCandiesByPerson(Person person);
 	void buyCandy(Long personId, Long candyId);
 
 }

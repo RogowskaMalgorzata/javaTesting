@@ -1,7 +1,8 @@
 package com.example.springhibernatedemo.service;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +38,10 @@ public class SellingManagerImpl implements SellingManager{
 		
 		for (Candy candy : person.getCandies()) {
 			candy.setSold(false);
+			candy.setPerson(null);
 			sessionFactory.getCurrentSession().update(candy);
 		}
-		sessionFactory.getCurrentSession().delete(person);	
+		sessionFactory.getCurrentSession().delete(person);
 	}
 
 	@Override
@@ -87,10 +89,10 @@ public class SellingManagerImpl implements SellingManager{
 	}
 
 	@Override
-	public List<Candy> getCandiesByPerson(Person person) {
+	public Set<Candy> getCandiesByPerson(Person person) {
 		person = (Person) sessionFactory.getCurrentSession().get(Person.class,
 				person.getpId());
-		List<Candy> candies = new ArrayList<Candy>(person.getCandies());
+		Set<Candy> candies = new HashSet<Candy>(person.getCandies());
 		return candies;
 	}
 
@@ -101,6 +103,7 @@ public class SellingManagerImpl implements SellingManager{
 		Candy candy = (Candy) sessionFactory.getCurrentSession()
 				.get(Candy.class, candyId);
 		candy.setSold(true);
+		candy.setPerson(person);
 		person.getCandies().add(candy);
 		
 	}
