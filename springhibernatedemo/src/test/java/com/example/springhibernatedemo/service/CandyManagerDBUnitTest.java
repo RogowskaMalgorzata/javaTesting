@@ -31,38 +31,37 @@ import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
     TransactionalTestExecutionListener.class,
     DbUnitTestExecutionListener.class })
 @DatabaseSetup("/fullData.xml")
-public class SellingManagerDBUnitTest {
+public class CandyManagerDBUnitTest {
 
 	@Autowired
-	SellingManager sellingManager;
+	CandyManager candyManager;
 	
 	@Test
-	@ExpectedDatabase(value = "/addPersonData.xml", table = "PERSON", 
-			assertionMode = DatabaseAssertionMode.NON_STRICT)
+	@ExpectedDatabase(value = "/addPersonData.xml", table = "PERSON")
 	public void addPersonCheck() {
         Person p = new Person();
         p.setpName("Kaziu");
         p.setPesel("12129022987");
         
-        sellingManager.addPerson(p);  
+        candyManager.addPerson(p);  
 	}
 	
 	@Test
 	public void getPersonsCheck() {
-		assertEquals(2, sellingManager.getAllPersons().size());
+		assertEquals(2, candyManager.getAllPersons().size());
 	}
 	
 	@Test
 	@ExpectedDatabase(value = "/deletePersonData.xml", table = "PERSON")
 	public void deletePersonCheck() {
-		Person rPerson = sellingManager.findPersonByPesel("10048580561");
+		Person rPerson = candyManager.findPersonByPesel("10048580561");
 		
-		sellingManager.deletePerson(rPerson);
+		candyManager.deletePerson(rPerson);
 	}
 	
 	@Test
 	public void findPersonByPeselCheck() {
-		assertEquals("Jan", sellingManager.findPersonByPesel("01028900561").getpName());
+		assertEquals("Jan", candyManager.findPersonByPesel("01028900561").getpName());
 	}
 	
 	@Test
@@ -74,45 +73,45 @@ public class SellingManagerDBUnitTest {
         c.setPrice(1);
         c.setSold(false);
         
-        Long newId = sellingManager.addCandy(c); 
+        Long newId = candyManager.addCandy(c); 
         assertTrue(newId > 0);
 	}
 	
 	@Test
 	public void getAvailableCandiesCheck() {
-		assertEquals(1, sellingManager.getAvailableCandies().size());
+		assertEquals(1, candyManager.getAvailableCandies().size());
 	}
 	
 	@Test
 	public void buyCandy() {
-		Candy c = sellingManager.getAvailableCandies().get(0);
-		Person p = sellingManager.getAllPersons().get(0);
+		Candy c = candyManager.getAvailableCandies().get(0);
+		Person p = candyManager.getAllPersons().get(0);
 		
-		assertEquals(1, sellingManager.getAvailableCandies().size());
+		assertEquals(1, candyManager.getAvailableCandies().size());
 		
-		sellingManager.buyCandy(p.getpId(), c.getcId());
-		assertEquals(0, sellingManager.getAvailableCandies().size());
+		candyManager.buyCandy(p.getpId(), c.getcId());
+		assertEquals(0, candyManager.getAvailableCandies().size());
 	}
 	
 	@Test
 	public void findCandyByIdCheck() {
-		assertEquals("ciastka", sellingManager.findCandyById(2L).getcName());
+		assertEquals("ciastka", candyManager.findCandyById(2L).getcName());
 	}
 	
 	@Test
 	public void getCandiesByPersonCheck() {
-		Person p = sellingManager.findPersonByPesel("01028900561");
-		assertEquals(1, sellingManager.getCandiesByPerson(p).size());
+		Person p = candyManager.findPersonByPesel("01028900561");
+		assertEquals(1, candyManager.getCandiesByPerson(p).size());
 	}
 	
 	@Test
 	@ExpectedDatabase(value = "/eatCandyData.xml", table="CANDY",
 	assertionMode = DatabaseAssertionMode.NON_STRICT)
 	public void eatCandy() {
-		Person p = sellingManager.findPersonByPesel("01028900561");
-		Candy c = sellingManager.findCandyById(2L);
+		Person p = candyManager.findPersonByPesel("01028900561");
+		Candy c = candyManager.findCandyById(2L);
 		
-		sellingManager.eatCandy(p, c);
+		candyManager.eatCandy(p, c);
 		assertEquals(0,p.getCandies().size());
 	}
 }

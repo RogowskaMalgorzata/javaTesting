@@ -14,7 +14,7 @@ import com.example.springhibernatedemo.domain.Person;
 
 @Component
 @Transactional
-public class SellingManagerImpl implements SellingManager{
+public class CandyManagerImpl implements CandyManager{
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -42,6 +42,7 @@ public class SellingManagerImpl implements SellingManager{
 			sessionFactory.getCurrentSession().update(candy);
 		}
 		sessionFactory.getCurrentSession().delete(person);
+		sessionFactory.getCurrentSession().flush();
 	}
 
 	@Override
@@ -81,6 +82,7 @@ public class SellingManagerImpl implements SellingManager{
 			person.getCandies().remove(toBeEaten);
 
 		sessionFactory.getCurrentSession().delete(candy);
+		sessionFactory.getCurrentSession().flush();
 	}
 
 	@Override

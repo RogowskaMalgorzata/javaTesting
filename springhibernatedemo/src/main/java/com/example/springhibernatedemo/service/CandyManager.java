@@ -7,7 +7,7 @@ import com.example.springhibernatedemo.domain.Candy;
 import com.example.springhibernatedemo.domain.Person;
 
 
-public interface SellingManager {
+public interface CandyManager {
 	void addPerson(Person person);
 	List<Person> getAllPersons();
 	void deletePerson(Person person);
