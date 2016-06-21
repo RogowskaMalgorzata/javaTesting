@@ -6,16 +6,18 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script> 
 <script src="./script.js"></script>
+<link rel="stylesheet" href="./styles.css">
 </head>
 <body>
- <div class="p-form-wrapper">
+<div id="left">
+<div class="p-form-wrapper">
 	 <h2>Add person</h2>
 	 <form>
 	 	<label for="name">First name</label>
 	 	<input id="name" />
 	 	<label for="yob">Year of birth</label>
 	 	<input id="yob" />
-	 	<div id="add-person">Add person</div>
+	 	<div><p id="add-person">Add person</p></div>
 	 </form>
  </div>
  
@@ -28,12 +30,13 @@
 	 	<input id="model" />
 	 	<label for="yop">Year of production</label>
 	 	<input id="yop" />
-	 	<div id="add-car">Add car</div>
+	 	<div><p id="add-car">Add car</p></div>
  	</form>
  </div>
  
  <div id="message"></div>
- 
+ </div>
+ <div id="right">
  <div class="p-table-wrapper">
 	 <table id="person-table">
 	 	<thead>
@@ -61,6 +64,6 @@
 		<tbody></tbody>
 	 </table>
  </div>
- 
+ </div>
 </body>
 </html>

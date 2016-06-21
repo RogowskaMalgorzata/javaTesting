@@ -1,0 +1,59 @@
+#add-car, #add-person{
+	color: #7A7B86; 
+}
+
+#add-car:hover, #add-person:hover {
+	cursor:pointer;
+	color: black; 
+}
+
+form label, form input {
+	display:block;
+}
+
+#left {
+	display: block;
+	float: left;
+	margin-left: 50px;
+}
+
+#right {
+	display: block;
+	float: right;
+	margin-right: 400px;
+	margin-top: 30px;
+}
+
+#p-table-wrapper, #c-table-wrapper {
+	overflow-y:auto;
+	width: 400px;
+	height: 400px;
+	margin-bottom: 15px;
+	border-radius: 5px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+} 
+
+th {
+	background-color: white;
+	color: #7A7B86;
+	height: 8px;
+}
+
+td, th {
+	padding: 7px;
+	padding-right: 17px;
+	text-align: left;
+}
+
+tbody tr:hover {
+	background-color: #7A7B86;
+	color: white;
+}
+
+#p-form-wrapper, #c-form-wrapper {
+	padding: 50px;
+}
